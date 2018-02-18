@@ -36,6 +36,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.method.ScrollingMovementMethod;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -120,34 +121,41 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LinearLayout activityLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        activityLayout.setLayoutParams(lp);
+        setContentView(R.layout.layout);
+        LinearLayout activityLayout = (LinearLayout)findViewById(R.id.linearLayout3);
         activityLayout.setOrientation(LinearLayout.VERTICAL);
-        activityLayout.setPadding(16, 16, 16, 16);
+        int dp = 50;
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
 
-        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px * 4, px);
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.MATCH_PARENT);
+//        activityLayout.setLayoutParams(lp);
+//        activityLayout.setOrientation(LinearLayout.VERTICAL);
+//        activityLayout.setPadding(16, 16, 16, 16);
+//
+//        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT);
 
 
 
-        System.out.println("THEEEEE TIMEEEE ZONEEEEEEE IS:   "+concatString);
+//        System.out.println("THEEEEE TIMEEEE ZONEEEEEEE IS:   "+concatString);
 
 
 
         four = new EditText(this);
         four.setText(starttime);
 
-        mCallApiButton = new Button(this);
+        mCallApiButton = (Button)findViewById(R.id.button);
+//        activityLayout.addView(mCallApiButton);
         mCallApiButton.setText(BUTTON_TEXT);
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallApiButton.setEnabled(false);
-                mOutputText.setText("");
+                //mOutputText.setText("");
                 summary = one.getText().toString();
                 location = two.getText().toString();
                 description = three.getText().toString();
@@ -165,83 +173,83 @@ public class MainActivity extends Activity
                 mCallApiButton.setEnabled(true);
             }
         });
-        TextView textView1 = new TextView(this);
-        textView1.setText("Event Summary:");
-        activityLayout.addView(textView1);
+//        TextView textView1 = new TextView(this);
+//        textView1.setText("Event Summary:");
+//        activityLayout.addView(textView1);
 
-        one = new EditText(this);
+        one = (EditText) findViewById(R.id.editText1);
         one.setText(summary, TextView.BufferType.EDITABLE);
-        activityLayout.addView(one);
+//        activityLayout.addView(one);
 
-        TextView textView2 = new TextView(this);
-        textView2.setText("Location:");
-        activityLayout.addView(textView2);
+//        TextView textView2 = new TextView(this);
+//        textView2.setText("Location:");
+//        activityLayout.addView(textView2);
 
-        two = new EditText(this);
+        two = (EditText) findViewById(R.id.editText2);
         two.setText(location, TextView.BufferType.EDITABLE);
-        activityLayout.addView(two);
+//        activityLayout.addView(two);
 
-        TextView textView3 = new TextView(this);
-        textView3.setText("Description:");
-        activityLayout.addView(textView3);
+//        TextView textView3 = new TextView(this);
+//        textView3.setText("Description:");
+//        activityLayout.addView(textView3);
 
-        three = new EditText(this);
+        three = (EditText) findViewById(R.id.editText3);
         three.setText(description, TextView.BufferType.EDITABLE);
-        activityLayout.addView(three);
+//        activityLayout.addView(three);
 
-        TextView textView4 = new TextView(this);
-        textView4.setText("Start Date:");
-        activityLayout.addView(textView4);
+//        TextView textView4 = new TextView(this);
+//        textView4.setText("Start Date:");
+//        activityLayout.addView(textView4);
 
-        four = new TextView(this);
-        four.setTextAppearance(android.R.style.TextAppearance_Large);
-        activityLayout.addView(four);
+        four = (TextView) findViewById(R.id.editText4);
+//        four.setTextAppearance(android.R.style.TextAppearance_Large);
+//        activityLayout.addView(four);
+//
+//        TextView textView5 = new TextView(this);
+//        textView5.setText("Start Time:");
+//        activityLayout.addView(textView5);
 
-        TextView textView5 = new TextView(this);
-        textView5.setText("Start Time:");
-        activityLayout.addView(textView5);
+        five = (TextView) findViewById(R.id.editText5);
+//        five.setTextAppearance(android.R.style.TextAppearance_Large);
+//        activityLayout.addView(five);
+//
+//        TextView textView6 = new TextView(this);
+//        textView6.setText("End Date:");
+//        activityLayout.addView(textView6);
 
-        five = new TextView(this);
-        five.setTextAppearance(android.R.style.TextAppearance_Large);
-        activityLayout.addView(five);
+        six = (TextView) findViewById(R.id.editText6);
+//        six.setTextAppearance(android.R.style.TextAppearance_Large);
+//        activityLayout.addView(six);
+//
+//        TextView textView7 = new TextView(this);
+//        textView7.setText("End Date:");
+//        activityLayout.addView(textView7);
 
-        TextView textView6 = new TextView(this);
-        textView6.setText("End Date:");
-        activityLayout.addView(textView6);
+        seven = (TextView) findViewById(R.id.editText7);
+//        seven.setTextAppearance(android.R.style.TextAppearance_Large);
+//        activityLayout.addView(seven);
+//
+//        TextView repeat = new TextView(this);
+//        repeat.setText("Repeat:");
+//        activityLayout.addView(repeat);
 
-        six = new TextView(this);
-        six.setTextAppearance(android.R.style.TextAppearance_Large);
-        activityLayout.addView(six);
-
-        TextView textView7 = new TextView(this);
-        textView7.setText("End Date:");
-        activityLayout.addView(textView7);
-
-        seven = new TextView(this);
-        seven.setTextAppearance(android.R.style.TextAppearance_Large);
-        activityLayout.addView(seven);
-
-        TextView repeat = new TextView(this);
-        repeat.setText("Repeat:");
-        activityLayout.addView(repeat);
-
-        eight = new CheckBox(this);
+        eight = (CheckBox) findViewById(R.id.checkBox);
         if (eight.isChecked())
             eight.setChecked(false);
-        activityLayout.addView(eight);
+//        activityLayout.addView(eight);
+//
+//        TextView textView8 = new TextView(this);
+//        textView8.setText("Weekly");
+//        activityLayout.addView(textView8);
 
-        TextView textView8 = new TextView(this);
-        textView8.setText("Weekly");
-        activityLayout.addView(textView8);
-
-        nine = new CheckBox(this);
+        nine = (CheckBox) findViewById(R.id.checkBox2);
         if (nine.isChecked())
             nine.setChecked(false);
-        activityLayout.addView(nine);
-
-        TextView textView9 = new TextView(this);
-        textView9.setText("Daily");
-        activityLayout.addView(textView9);
+//        activityLayout.addView(nine);
+//
+//        TextView textView9 = new TextView(this);
+//        textView9.setText("Daily");
+//        activityLayout.addView(textView9);
 
 
         String temp = dateFromDateTime(starttime);
@@ -354,10 +362,10 @@ public class MainActivity extends Activity
             }
         });
 
-        activityLayout.addView(mCallApiButton);
-
+//        activityLayout.addView(mCallApiButton);
+//
         mOutputText = new TextView(this);
-        mOutputText.setLayoutParams(tlp);
+        //mOutputText.setLayoutParams(tlp);
         mOutputText.setPadding(16, 16, 16, 16);
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
@@ -367,8 +375,8 @@ public class MainActivity extends Activity
 
         mProgress = new ProgressDialog(this);
         mProgress.setMessage("Saving ...");
-
-        setContentView(activityLayout);
+//
+//        setContentView(activityLayout);
 
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
@@ -699,8 +707,8 @@ public class MainActivity extends Activity
 
         @Override
         protected void onPreExecute() {
-            mOutputText.setText("");
-            mProgress.show();
+//            mOutputText.setText("");
+//            mProgress.show();
         }
 
         @Override
