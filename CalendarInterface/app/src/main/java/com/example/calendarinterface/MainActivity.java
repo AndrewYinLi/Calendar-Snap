@@ -67,8 +67,8 @@ public class MainActivity extends Activity
         VALUES.add("THIS IS A SUMMARY!");
         VALUES.add("THIS IS A LOCATION!");
         VALUES.add("THIS IS A DESCRIPTION!");
-        VALUES.add("2018-02-17T09:00:00");
-        VALUES.add("2018-02-17T17:00:00");
+        VALUES.add("2018-02-17T09:00");
+        VALUES.add("2018-02-17T17:00");
         return "5";
     }
 
@@ -106,6 +106,7 @@ public class MainActivity extends Activity
     private TextView four;
     private TextView five;
     private TextView six;
+    private TextView seven;
 
     /**
      * Create the main activity.
@@ -146,7 +147,7 @@ public class MainActivity extends Activity
                 location = two.getText().toString();
                 description = three.getText().toString();
                 starttime = four.getText().toString().concat("T".concat(five.getText().toString().concat(concatString)));
-                endtime = four.getText().toString().concat("T".concat(six.getText().toString().concat(concatString)));
+                endtime = six.getText().toString().concat("T".concat(seven.getText().toString().concat(concatString)));
                 getResultsFromApi();
                 mCallApiButton.setEnabled(true);
             }
@@ -176,7 +177,7 @@ public class MainActivity extends Activity
         activityLayout.addView(three);
 
         TextView textView4 = new TextView(this);
-        textView4.setText("Date:");
+        textView4.setText("Start Date:");
         activityLayout.addView(textView4);
 
         four = new TextView(this);
@@ -184,7 +185,7 @@ public class MainActivity extends Activity
         activityLayout.addView(four);
 
         TextView textView5 = new TextView(this);
-        textView5.setText("Start:");
+        textView5.setText("Start Time:");
         activityLayout.addView(textView5);
 
         five = new TextView(this);
@@ -192,12 +193,20 @@ public class MainActivity extends Activity
         activityLayout.addView(five);
 
         TextView textView6 = new TextView(this);
-        textView6.setText("Start:");
+        textView6.setText("End Date:");
         activityLayout.addView(textView6);
 
         six = new TextView(this);
         six.setTextAppearance(android.R.style.TextAppearance_Large);
         activityLayout.addView(six);
+
+        TextView textView7 = new TextView(this);
+        textView7.setText("End Date:");
+        activityLayout.addView(textView7);
+
+        seven = new TextView(this);
+        seven.setTextAppearance(android.R.style.TextAppearance_Large);
+        activityLayout.addView(seven);
 
 
         String temp = dateFromDateTime(starttime);
@@ -208,8 +217,11 @@ public class MainActivity extends Activity
         String temp1 = timeFromDateTime(starttime);
         five.setText(temp1);
 
-        String temp2 = timeFromDateTime(endtime);
+        String temp2 = dateFromDateTime(endtime);
         six.setText(temp2);
+
+        String temp3 = timeFromDateTime(endtime);
+        seven.setText(temp3);
 
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -259,6 +271,28 @@ public class MainActivity extends Activity
             }
         });
 
+        final DatePickerDialog.OnDateSetListener date1 = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                myCalendar.set(Calendar.YEAR, i);
+                myCalendar.set(Calendar.MONTH, i1);
+                myCalendar.set(Calendar.DAY_OF_MONTH, i2);
+
+                String myFormat = "yyyy-MM-dd"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                six.setText(sdf.format(myCalendar.getTime()));
+            }
+        };
+
+        six.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(MainActivity.this, date1, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+
+
         final TimePickerDialog.OnTimeSetListener etime = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
@@ -274,11 +308,11 @@ public class MainActivity extends Activity
                     minute = "0".concat(minute);
 
                 String time = hour + ":" + minute;
-                six.setText(time);
+                seven.setText(time);
             }
         };
 
-        six.setOnClickListener(new View.OnClickListener() {
+        seven.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new TimePickerDialog(MainActivity.this, etime, myCalendar.get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE), false).show();
