@@ -1,9 +1,6 @@
 apply plugin: 'com.android.application'
 
-android {
-    compileSdkVersion 20
 
-}
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -13,7 +10,19 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath false
+            }
+        }
     }
+
+    packagingOptions {
+        exclude 'project.properties'
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/io.netty.versions.properties'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,5 +38,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+
     compile 'com.google.cloud:google-cloud-vision:1.14.0'
+    //annotationProcessor 'com.google.cloud:google-cloud-vision:1.14.0'
 }
