@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
+                "IMG_"+ timeStamp + ".jpg");
         return mediaFile;
     }
 
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                             yesButton.setVisibility(View.INVISIBLE);
                             noButton.setVisibility(View.INVISIBLE);
                             mCamera.startPreview();
-                    }
+                        }
                     }
                 }
         );
@@ -191,14 +191,13 @@ public class MainActivity extends AppCompatActivity {
                                 String encodedfile = new String(Base64.encodeBase64(fileContent), "UTF-8");
                                 //debugText.setText(encodedfile);
                                 String payload="{\"requests\":[{\"image\":{\"content\":\"" + encodedfile + "\"},\"features\":[{\"type\":\"TEXT_DETECTION\"}]}]}";
-                                //Log.d("SHITFUCK", payload);
+
                                 String output = new Vision().execute(payload).get();
-                                JSONObject obj = new JSONObject(output);
+                                //JSONObject obj = new JSONObject(output);
 
-                                //Log.d("fuck", obj.toString());
-                                String obj6 = obj.getJSONArray("responses").getJSONObject(0).getJSONArray("textAnnotations").getJSONObject(0).getString("description");
+                                //String obj6 = obj.getJSONArray("responses").getJSONObject(0).getJSONArray("textAnnotations").getJSONObject(0).getString("description");
 
-                                debugText.setText(obj6);
+                                debugText.setText(output);
                                 //debugText.setText("response: " + response);
                             }
                             catch(Exception e){
@@ -218,3 +217,4 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 }
+
