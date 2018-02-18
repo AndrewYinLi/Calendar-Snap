@@ -1,12 +1,18 @@
 package com.example.andre.cameraworks;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.hardware.Camera.Area;
 import android.icu.text.SimpleDateFormat;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.hardware.Camera;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -14,81 +20,79 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.cloud.vision.v1.AnnotateImageRequest;
-import com.google.cloud.vision.v1.AnnotateImageResponse;
-import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
-import com.google.cloud.vision.v1.EntityAnnotation;
-import com.google.cloud.vision.v1.Feature;
-import com.google.cloud.vision.v1.Feature.Type;
-import com.google.cloud.vision.v1.Image;
-import com.google.cloud.vision.v1.ImageAnnotatorClient;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.Descriptors;
-import com.google.protobuf.MapEntry;
+import com.google.api.client.util.Lists;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 
 public class MainActivity extends AppCompatActivity {
 
     private Camera mCamera = null;
     private CameraView mCameraView = null;
-    private boolean canSnap = true;
-    private byte[] imageArr;
-    private TextView debugText;
+    private boolean canSnap = true; // Whether you can take a picture
+    private TextView debugText; // For debugging purposes only
+    byte[] image;
+    File picture;
 
+
+    /**
+     * Calls a nested function that saves picture
+     * @return picture taken
+     */
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
+        /**
+         * Writes picture byte array to a file.
+         * @param data - byte array representation for the picture
+         * @param camera - Camera object
+         * @return
+         */
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null){
-                return;
-            }
+            File pictureFile = getOutputMediaFile();
+            Log.d("pictureFile", pictureFile.toString());
 
-            try {
-                imageArr = data;
+            if (pictureFile == null){
+                return; // If there is no file to write to, escape function.
+            }
+            try { // Attempt to save picture
+                image = data;
+                Log.d("image", image.toString());
+                //debugText.setText(pictureFile.toString());
+
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
+                picture = pictureFile;
                 mCamera.stopPreview();
-                //camera.startPreview();
-            } catch (FileNotFoundException e) {
-
-            } catch (IOException e) {
-
             }
+            catch (FileNotFoundException e) {}
+            catch (IOException e) {}
         }
     };
 
-    /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp");
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
+    /**
+     * Create a File for saving an image or video
+     * @return file reference to write the picture to
+     */
+    private static File getOutputMediaFile(){
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyCameraApp");
 
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
@@ -178,13 +182,27 @@ public class MainActivity extends AppCompatActivity {
                         if(!canSnap) {
                             spinner.setVisibility(View.VISIBLE);
                             try {
-                                String payload = "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\"https://marketplace.canva.com/MAB1BT5b_Fs/1/0/thumbnail_large/canva-coffee-fundraising-event-poster-MAB1BT5b_Fs.jpg\"}},\"features\":[{\"type\":\"TEXT_DETECTION\"}]}]}";
+                                //String payload = "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\"https://marketplace.canva.com/MAB1BT5b_Fs/1/0/thumbnail_large/canva-coffee-fundraising-event-poster-MAB1BT5b_Fs.jpg\"}},\"features\":[{\"type\":\"TEXT_DETECTION\"}]}]}";
+                                FileInputStream fileInputStream = new FileInputStream(picture);
+                                long byteLength = picture.length();
+                                byte[] fileContent = new byte[(int) byteLength];
+                                fileInputStream.read(fileContent,0,(int)byteLength);
+
+                                String encodedfile = new String(Base64.encodeBase64(fileContent), "UTF-8");
+                                //debugText.setText(encodedfile);
+                                String payload="{\"requests\":[{\"image\":{\"content\":\"" + encodedfile + "\"},\"features\":[{\"type\":\"TEXT_DETECTION\"}]}]}";
+                                //Log.d("SHITFUCK", payload);
                                 String output = new Vision().execute(payload).get();
-                                debugText.setText(output);
+                                JSONObject obj = new JSONObject(output);
+
+                                //Log.d("fuck", obj.toString());
+                                String obj6 = obj.getJSONArray("responses").getJSONObject(0).getJSONArray("textAnnotations").getJSONObject(0).getString("description");
+
+                                debugText.setText(obj6);
                                 //debugText.setText("response: " + response);
                             }
                             catch(Exception e){
-                                debugText.setText(e.toString());
+                                //debugText.setText(e.toString());
                             }
                             //opticalProcessing();
                             /*
@@ -199,49 +217,4 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
-
-
-    /*
-    private void opticalProcessing(){
-        // Instantiates a client
-        try (ImageAnnotatorClient vision = ImageAnnotatorClient.create()) {
-            ByteString imgBytes = ByteString.copyFrom(imageArr);
-            // Builds the image annotation request
-            List<AnnotateImageRequest> requests = new ArrayList<>();
-            Image img = Image.newBuilder().setContent(imgBytes).build();
-            Feature feat = Feature.newBuilder().setType(Type.LABEL_DETECTION).build();
-            AnnotateImageRequest request = AnnotateImageRequest.newBuilder()
-                    .addFeatures(feat)
-                    .setImage(img)
-                    .build();
-            requests.add(request);
-
-            // Performs label detection on the image file
-            BatchAnnotateImagesResponse response = vision.batchAnnotateImages(requests);
-            List<AnnotateImageResponse> responses = response.getResponsesList();
-
-            for (AnnotateImageResponse res : responses) {
-                if (res.hasError()) {
-                    System.out.printf("Error: %s\n", res.getError().getMessage());
-                    debugText.setText(res.getError().getMessage());
-                    return;
-                }
-
-                String test = "";
-                for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
-                    Map<Descriptors.FieldDescriptor, Object> text = annotation.getAllFields();
-                    for(Map.Entry<Descriptors.FieldDescriptor, Object> word : text.entrySet()){
-                        test += word.getValue().toString();
-                    }
-
-                }
-                debugText.setText(test);
-            }
-        } catch (IOException e) {
-            debugText.setText(e.toString());
-        } catch (Exception e) {
-            debugText.setText(e.toString());
-        }
-    }
-    */
 }

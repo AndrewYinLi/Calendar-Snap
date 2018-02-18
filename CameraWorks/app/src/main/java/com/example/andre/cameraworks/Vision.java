@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+
 public class Vision extends AsyncTask<String,Void,String> {
     String requestUrl = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBN4_SF1LOBK8DkavvqkEgFjLo5Gg1CuJU";
     @Override
