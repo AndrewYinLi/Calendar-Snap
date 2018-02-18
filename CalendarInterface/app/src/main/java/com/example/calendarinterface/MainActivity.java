@@ -59,8 +59,8 @@ public class MainActivity extends Activity
     private TextView mOutputText;
     private Button mCallApiButton;
     ProgressDialog mProgress;
-
-
+    
+    private final ArrayList<String> VALUES = getIntent().getExtras().getStringArrayList("VALUES");   
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -71,11 +71,11 @@ public class MainActivity extends Activity
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY ,CalendarScopes.CALENDAR};
 
-    private String summary= "SUMMARYOFEVENT!";
-    private String location= "LOCATIONOFEVENT!";
-    private String description= "DESCRIPTIONOFEVENT!";
-    private String starttime = "2018-02-17T09:00:00-04:00";
-    private String endtime = "2018-02-17T17:00:00-04:00";
+    private String summary= VALUES.get(0);
+    private String location= VALUES.get(1);
+    private String description= VALUES.get(2);
+    private String starttime = VALUES.get(3);
+    private String endtime = VALUES.get(4);
     private String timezone = "America/New_York";
     private EditText one;
     private EditText two;
