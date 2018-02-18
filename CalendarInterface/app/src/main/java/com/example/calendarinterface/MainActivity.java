@@ -39,6 +39,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -107,6 +108,10 @@ public class MainActivity extends Activity
     private TextView five;
     private TextView six;
     private TextView seven;
+    private CheckBox eight;
+    private CheckBox nine;
+    private Boolean rec = false;
+    private String freq = "";
 
     /**
      * Create the main activity.
@@ -148,6 +153,14 @@ public class MainActivity extends Activity
                 description = three.getText().toString();
                 starttime = four.getText().toString().concat("T".concat(five.getText().toString().concat(concatString)));
                 endtime = six.getText().toString().concat("T".concat(seven.getText().toString().concat(concatString)));
+                if(nine.isChecked()){
+                    rec = true;
+                    freq="DAILY";
+                } else if(eight.isChecked()){
+                    System.out.println("Eight was reached");
+                    rec = true;
+                    freq="WEEKLY";
+                }
                 getResultsFromApi();
                 mCallApiButton.setEnabled(true);
             }
@@ -207,6 +220,28 @@ public class MainActivity extends Activity
         seven = new TextView(this);
         seven.setTextAppearance(android.R.style.TextAppearance_Large);
         activityLayout.addView(seven);
+
+        TextView repeat = new TextView(this);
+        repeat.setText("Repeat:");
+        activityLayout.addView(repeat);
+
+        eight = new CheckBox(this);
+        if (eight.isChecked())
+            eight.setChecked(false);
+        activityLayout.addView(eight);
+
+        TextView textView8 = new TextView(this);
+        textView8.setText("Weekly");
+        activityLayout.addView(textView8);
+
+        nine = new CheckBox(this);
+        if (nine.isChecked())
+            nine.setChecked(false);
+        activityLayout.addView(nine);
+
+        TextView textView9 = new TextView(this);
+        textView9.setText("Daily");
+        activityLayout.addView(textView9);
 
 
         String temp = dateFromDateTime(starttime);
@@ -607,8 +642,9 @@ public class MainActivity extends Activity
                     .setTimeZone(timezone);
             event.setEnd(end);
 
-            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=1"};
-            event.setRecurrence(Arrays.asList(recurrence));
+            String[] recurrence = new String[] {"RRULE:FREQ="+freq+";"};
+            if(rec)
+                event.setRecurrence(Arrays.asList(recurrence));
 
 //            EventAttendee[] attendees = new EventAttendee[] {
 //                    new EventAttendee().setEmail("lpage@example.com"),
