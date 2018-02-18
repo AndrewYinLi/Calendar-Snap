@@ -1,14 +1,12 @@
 # Snap-Calendar
 hackCWRU V
 
-This andriod app enable user to take a picture of an event poster and add a corresponding event in Google Calendar with the least amount of effort.
+Utilized Google Cloud OCR and Natural Language Processing and Android Studio.
+
+This Android app's design is to enable the user to take a picture of a flyer and create a Google Calendar event from it. We were not able to fully finish; the camera app takes pictures and displays on the screen what it sees. The calendar app enables creating Google Calendar events. We were in the process of merging the two applications when we ran out of time.
 
 Team Member:
-Andrew L
-Daniel F
-Frank C
-Jude F
-
-Contributor:
-Jacob C
-Anders C
+Andrew Li (http://www.andrewyinli.com/)
+Daniel Firebanks
+Frank Cheng
+Jude Fernandes
