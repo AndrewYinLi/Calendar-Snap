@@ -80,9 +80,9 @@ public class MainActivity extends Activity
     private EditText one;
     private EditText two;
     private EditText three;
-    private EditText four;
-    private EditText five;
-    private EditText six;
+    private TextView four;
+    private TextView five;
+    private TextView six;
 
     /**
      * Create the main activity.
@@ -150,21 +150,24 @@ public class MainActivity extends Activity
         textView4.setText("Date:");
         activityLayout.addView(textView4);
 
-        four = new EditText(this);
+        four = new TextView(this);
+        four.setTextAppearance(android.R.style.TextAppearance_Large);
         activityLayout.addView(four);
 
         TextView textView5 = new TextView(this);
         textView5.setText("Start:");
         activityLayout.addView(textView5);
 
-        five = new EditText(this);
+        five = new TextView(this);
+        five.setTextAppearance(android.R.style.TextAppearance_Large);
         activityLayout.addView(five);
 
         TextView textView6 = new TextView(this);
         textView6.setText("Start:");
         activityLayout.addView(textView6);
 
-        six = new EditText(this);
+        six = new TextView(this);
+        six.setTextAppearance(android.R.style.TextAppearance_Large);
         activityLayout.addView(six);
 
 
@@ -550,14 +553,14 @@ public class MainActivity extends Activity
 //            };
 //            event.setAttendees(Arrays.asList(attendees));
 //
-//            EventReminder[] reminderOverrides = new EventReminder[] {
-//                    new EventReminder().setMethod("email").setMinutes(24 * 60),
-//                    new EventReminder().setMethod("popup").setMinutes(10),
-//            };
-//            Event.Reminders reminders = new Event.Reminders()
-//                    .setUseDefault(false)
-//                    .setOverrides(Arrays.asList(reminderOverrides));
-//            event.setReminders(reminders);
+            EventReminder[] reminderOverrides = new EventReminder[] {
+                    new EventReminder().setMethod("email").setMinutes(24 * 60),
+                    new EventReminder().setMethod("popup").setMinutes(10),
+            };
+            Event.Reminders reminders = new Event.Reminders()
+                    .setUseDefault(false)
+                    .setOverrides(Arrays.asList(reminderOverrides));
+            event.setReminders(reminders);
 
             String calendarId = "primary";
             event = mService.events().insert(calendarId, event).execute();
