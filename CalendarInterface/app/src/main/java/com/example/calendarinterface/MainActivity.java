@@ -47,6 +47,7 @@ import android.widget.TimePicker;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.Calendar;
 
@@ -74,9 +75,19 @@ public class MainActivity extends Activity
     private String summary= "SUMMARYOFEVENT!";
     private String location= "LOCATIONOFEVENT!";
     private String description= "DESCRIPTIONOFEVENT!";
-    private String starttime = "2018-02-17T09:00:00-04:00";
-    private String endtime = "2018-02-17T17:00:00-04:00";
-    private String timezone = "America/New_York";
+    private String starttime = "2018-02-17T09:00:00-05:00";
+    private String endtime = "2018-02-17T17:00:00-05:00";
+    private TimeZone tz = TimeZone.getDefault();
+    private String timezone = tz.getID();
+    private String offset(TimeZone tz){
+        String offset = Integer.toString(tz.getOffset(new Date().getTime()) / 1000 / 3600);
+        if(offset.length()<3){
+            offset = offset.substring(0,1)+"0"+offset.substring(1);
+        }
+        offset+=":00";
+        return offset;
+    }
+    private String concatString = ":00"+offset(tz);
     private EditText one;
     private EditText two;
     private EditText three;
@@ -103,6 +114,12 @@ public class MainActivity extends Activity
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
+
+
+        System.out.println("THEEEEE TIMEEEE ZONEEEEEEE IS:   "+concatString);
+
+
+
         four = new EditText(this);
         four.setText(starttime);
 
@@ -116,8 +133,8 @@ public class MainActivity extends Activity
                 summary = one.getText().toString();
                 location = two.getText().toString();
                 description = three.getText().toString();
-                starttime = four.getText().toString().concat("T".concat(five.getText().toString().concat(":00-04:00")));
-                endtime = four.getText().toString().concat("T".concat(six.getText().toString().concat(":00-04:00")));
+                starttime = four.getText().toString().concat("T".concat(five.getText().toString().concat(concatString)));
+                endtime = four.getText().toString().concat("T".concat(six.getText().toString().concat(concatString)));
                 getResultsFromApi();
                 mCallApiButton.setEnabled(true);
             }
