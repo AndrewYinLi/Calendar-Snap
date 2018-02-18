@@ -20,8 +20,11 @@ import com.google.api.services.calendar.model.*;
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,17 +34,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.TimePicker;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Calendar;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -53,14 +60,29 @@ public class MainActivity extends Activity
     private Button mCallApiButton;
     ProgressDialog mProgress;
 
+
+
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String BUTTON_TEXT = "Call Google Calendar API";
+    private static final String BUTTON_TEXT = "CONFIRM";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY ,CalendarScopes.CALENDAR};
+
+    private String summary= "SUMMARYOFEVENT!";
+    private String location= "LOCATIONOFEVENT!";
+    private String description= "DESCRIPTIONOFEVENT!";
+    private String starttime = "2018-02-17T09:00:00-04:00";
+    private String endtime = "2018-02-17T17:00:00-04:00";
+    private String timezone = "America/New_York";
+    private EditText one;
+    private EditText two;
+    private EditText three;
+    private EditText four;
+    private EditText five;
+    private EditText six;
 
     /**
      * Create the main activity.
@@ -81,6 +103,9 @@ public class MainActivity extends Activity
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
+        four = new EditText(this);
+        four.setText(starttime);
+
         mCallApiButton = new Button(this);
         mCallApiButton.setText(BUTTON_TEXT);
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
@@ -88,10 +113,146 @@ public class MainActivity extends Activity
             public void onClick(View v) {
                 mCallApiButton.setEnabled(false);
                 mOutputText.setText("");
+                summary = one.getText().toString();
+                location = two.getText().toString();
+                description = three.getText().toString();
+                starttime = four.getText().toString().concat("T".concat(five.getText().toString().concat(":00-04:00")));
+                endtime = four.getText().toString().concat("T".concat(six.getText().toString().concat(":00-04:00")));
                 getResultsFromApi();
                 mCallApiButton.setEnabled(true);
             }
         });
+        TextView textView1 = new TextView(this);
+        textView1.setText("Event Summary:");
+        activityLayout.addView(textView1);
+
+        one = new EditText(this);
+        one.setText(summary, TextView.BufferType.EDITABLE);
+        activityLayout.addView(one);
+
+        TextView textView2 = new TextView(this);
+        textView2.setText("Location:");
+        activityLayout.addView(textView2);
+
+        two = new EditText(this);
+        two.setText(location, TextView.BufferType.EDITABLE);
+        activityLayout.addView(two);
+
+        TextView textView3 = new TextView(this);
+        textView3.setText("Description:");
+        activityLayout.addView(textView3);
+
+        three = new EditText(this);
+        three.setText(description, TextView.BufferType.EDITABLE);
+        activityLayout.addView(three);
+
+        TextView textView4 = new TextView(this);
+        textView4.setText("Date:");
+        activityLayout.addView(textView4);
+
+        four = new EditText(this);
+        activityLayout.addView(four);
+
+        TextView textView5 = new TextView(this);
+        textView5.setText("Start:");
+        activityLayout.addView(textView5);
+
+        five = new EditText(this);
+        activityLayout.addView(five);
+
+        TextView textView6 = new TextView(this);
+        textView6.setText("Start:");
+        activityLayout.addView(textView6);
+
+        six = new EditText(this);
+        activityLayout.addView(six);
+
+
+        String temp = dateFromDateTime(starttime);
+        four.setText(temp);
+
+        final Calendar myCalendar = Calendar.getInstance();
+
+        String temp1 = timeFromDateTime(starttime);
+        five.setText(temp1);
+
+        String temp2 = timeFromDateTime(endtime);
+        six.setText(temp2);
+
+
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                myCalendar.set(Calendar.YEAR, i);
+                myCalendar.set(Calendar.MONTH, i1);
+                myCalendar.set(Calendar.DAY_OF_MONTH, i2);
+
+                String myFormat = "yyyy-MM-dd"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                four.setText(sdf.format(myCalendar.getTime()));
+            }
+        };
+
+        four.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(MainActivity.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        final TimePickerDialog.OnTimeSetListener stime = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                myCalendar.set(Calendar.HOUR, i);
+                myCalendar.set(Calendar.MINUTE, i1);
+
+                String hour = Integer.toString(i);
+                if (i < 10)
+                    hour = "0".concat(hour);
+
+                String minute = Integer.toString(i1);
+                if (i1 < 10)
+                    minute = "0".concat(minute);
+
+                String time = hour + ":" + minute;
+
+                five.setText(time);
+            }
+        };
+
+        five.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(MainActivity.this, stime, myCalendar.get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE), false).show();
+            }
+        });
+
+        final TimePickerDialog.OnTimeSetListener etime = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                myCalendar.set(Calendar.HOUR, i);
+                myCalendar.set(Calendar.MINUTE, i1);
+
+                String hour = Integer.toString(i);
+                if (i < 10)
+                    hour = "0".concat(hour);
+
+                String minute = Integer.toString(i1);
+                if (i1 < 10)
+                    minute = "0".concat(minute);
+
+                String time = hour + ":" + minute;
+                six.setText(time);
+            }
+        };
+
+        six.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(MainActivity.this, etime, myCalendar.get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE), false).show();
+            }
+        });
+
         activityLayout.addView(mCallApiButton);
 
         mOutputText = new TextView(this);
@@ -100,11 +261,11 @@ public class MainActivity extends Activity
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
         mOutputText.setText(
-                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
+                "Click the \'" + BUTTON_TEXT +"\' button to save to Google Calendar");
         activityLayout.addView(mOutputText);
 
         mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Calling Google Calendar API ...");
+        mProgress.setMessage("Saving ...");
 
         setContentView(activityLayout);
 
@@ -114,7 +275,20 @@ public class MainActivity extends Activity
                 .setBackOff(new ExponentialBackOff());
     }
 
+    private String dateFromDateTime(String datetime){
+        String [] split = datetime.split("T");
+        return split[0];
+    }
 
+    private String timeFromDateTime(String datetime){
+        String [] split = datetime.split("T");
+        String [] split2 = split[1].split("-");
+        return split2[0].substring(0,5);
+    }
+
+    private String dateTimeFromDateTime(String date, String time){
+        return date+"T"+time+"-4:00";
+    }
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are
@@ -338,52 +512,52 @@ public class MainActivity extends Activity
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
-                makeEvent();
-                return getDataFromApi();
+                makeEvent(summary, location, description, starttime, endtime, timezone);
+                return Collections.emptyList();//getDataFromApi();
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
-                return null;
+                return Collections.emptyList();
             }
         }
 
 
 
-        private void makeEvent() throws IOException{
+        private void makeEvent(String summary, String location, String description, String starttime, String endtime, String timezone) throws IOException{
             Event event = new Event()
-                    .setSummary("Google I/O 2015")
-                    .setLocation("800 Howard St., San Francisco, CA 94103")
-                    .setDescription("A chance to hear more about Google's developer products.");
+                    .setSummary(summary)
+                    .setLocation(location)
+                    .setDescription(description);
 
-            DateTime startDateTime = new DateTime("2018-02-18T09:00:00-07:00");
+            DateTime startDateTime = new DateTime(starttime);
             EventDateTime start = new EventDateTime()
                     .setDateTime(startDateTime)
-                    .setTimeZone("America/Los_Angeles");
+                    .setTimeZone(timezone);
             event.setStart(start);
 
-            DateTime endDateTime = new DateTime("2018-02-18T17:00:00-07:00");
+            DateTime endDateTime = new DateTime(endtime);
             EventDateTime end = new EventDateTime()
                     .setDateTime(endDateTime)
-                    .setTimeZone("America/Los_Angeles");
+                    .setTimeZone(timezone);
             event.setEnd(end);
 
-            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
+            String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=1"};
             event.setRecurrence(Arrays.asList(recurrence));
 
-            EventAttendee[] attendees = new EventAttendee[] {
-                    new EventAttendee().setEmail("lpage@example.com"),
-                    new EventAttendee().setEmail("sbrin@example.com"),
-            };
-            event.setAttendees(Arrays.asList(attendees));
-
-            EventReminder[] reminderOverrides = new EventReminder[] {
-                    new EventReminder().setMethod("email").setMinutes(24 * 60),
-                    new EventReminder().setMethod("popup").setMinutes(10),
-            };
-            Event.Reminders reminders = new Event.Reminders()
-                    .setUseDefault(false)
-                    .setOverrides(Arrays.asList(reminderOverrides));
-            event.setReminders(reminders);
+//            EventAttendee[] attendees = new EventAttendee[] {
+//                    new EventAttendee().setEmail("lpage@example.com"),
+//                    new EventAttendee().setEmail("sbrin@example.com"),
+//            };
+//            event.setAttendees(Arrays.asList(attendees));
+//
+//            EventReminder[] reminderOverrides = new EventReminder[] {
+//                    new EventReminder().setMethod("email").setMinutes(24 * 60),
+//                    new EventReminder().setMethod("popup").setMinutes(10),
+//            };
+//            Event.Reminders reminders = new Event.Reminders()
+//                    .setUseDefault(false)
+//                    .setOverrides(Arrays.asList(reminderOverrides));
+//            event.setReminders(reminders);
 
             String calendarId = "primary";
             event = mService.events().insert(calendarId, event).execute();
@@ -431,7 +605,7 @@ public class MainActivity extends Activity
         protected void onPostExecute(List<String> output) {
             mProgress.hide();
             if (output == null || output.size() == 0) {
-                mOutputText.setText("No results returned.");
+                mOutputText.setText("");
             } else {
                 output.add(0, "Data retrieved using the Google Calendar API:");
                 mOutputText.setText(TextUtils.join("\n", output));
