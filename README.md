@@ -1,5 +1,4 @@
-# Snap-Calendar
-hackCWRU V
+For hackCWRU
 
 Utilized Google Cloud OCR and Natural Language Processing and Android Studio.
 
