@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "gifted-proxy-195516",
+  "private_key_id": "75d3d0e07df7854ae2f77c567fb8e329348a9bf4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDTyNu6l1ut+qg6\nld9brpXcf3cuR9z5HPHzhaU/rVLUfkNzFQcgAOdblbxF086r0gms6F/9V9rr8E2I\nlN2ybw5KGZpZCZ6CGwCpVKGadRgwU4AnyglpQF6CejR9xiSo5Xv5bH7PEv19p9ok\nkgx2NF1uavmIoC6ITGN+g5CrPyA5HrHJAaIKDod8xo9xdlzNnZO2JO6ZnBb1qpUM\njNapDRziGfureHA8JHoy5Cyh4K3GbNr/iczEb68t5xDsD6647xvQbY3fodbtUAKq\nfyQ+vJfcgcqw7zjR2vEs8H2BbuvoevyFTMSLcueMsUzsd8+cLKHA2Bprawwm4CxP\niIoijul1AgMBAAECggEADwi9iG5sOgUxjLnM7v44HJIJN4YvH+63wk4kyp4W44d0\naaapfdJymg7Jcbo1JqoKDnXkh+CFEFCxFawJB5IDVVah8rDQdB358GCrTtgBzT8a\n5Dg0biin9404orZpLdA0pSKC51egGnEgTDj4nNTfeRIrqqZBsg1HgYNSHBtRbJx/\nD7l5YDe2qXUbyxlD+gaV0s4H9conpzC9tdOntVVptpSojP4IlEfQmBnFpTlJSXZZ\nD/cTfTVvEwfUq1Zyq3mqyBYieCWqgC1/ksQ2jHZ2ySlYYTQx7cXDCbgPmy6CPyvx\n5yPESR7N6UB+igpO1OSYrNPB47lRdIcJ9xnyitQiAQKBgQD6GQqk8PHoxGRyxkdO\nKJVrdKBQdGSBc7cC3fOFBsxSEN58VXfbdyD358Jk4ccgCq2l140AdrIWbKjYlByx\nP/GDk/RSzxZzrItDUc/ZvDnngocW2+R5GRozFsIxbob7WV3oGCXt23OZjJmXbqsD\nzLOMQ7x2nOazQKRqZMr9WM/J9QKBgQDYyFk902g21v2MDG4c73g8SEaicoETGFD0\ns97XrZmjeVXPnrb2HKYQJ9Ja1eTY4FKct27cUabWRFIQeh0tKoqc0SP28fFHYbX+\n7Hp3if5M9UrmnAWIT+iOIeVen2ZZDY2aqsyXNjzgkY84Cf8m8OfD6qjaQZCzL/pb\n+4KGyMFxgQKBgH0Yu39HWelRGuFiFlac7ChknK/BmGg8BiWz+VPn05mVAIR2h85J\n5z65OT4WxPBdBwC2Mbwyot+emFJEu5lZX6euAP7OwO85NiuFJ49EnD4VxxaDBOQh\nzz4Quy/YlkHxMIygT5CLPWZnsofRfk8XPBQD6af20VqGEfd51SMmIkFlAoGAPlvD\ncAl0HPJTFQouUpyAFbckum39uyRvhTSIkboaS/AHQyYAs2MiUdtio0aMAeblXLdX\naIEEYPZeNOcrpWZrYRi4I70NDt+InsAfqmtDf5e/5/5RiRiTaO9PL5zisBM5/JfN\nKmIruN2mORSHFQiPYsgJsl7R5PmUJwl+To9JNgECgYEA+GT5SpzVAdXM7cooEiid\nh3f9ANBZyDmabU4DvgcX0k8NryKAOk6HDI/11v6jK8TxuUIXPVw7uHiW+t/Sv0OG\nyuJK7kEy9ct5/Ct1w1i0fMcofn9grFGxyEIl5ZB2TBWTvLyRY5NvzWBZ1kf6m7pK\nu8FkO0VKu8HjiIHa4XNR/q8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "smartandrew@gifted-proxy-195516.iam.gserviceaccount.com",
+  "client_id": "113018680840169010519",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/smartandrew%40gifted-proxy-195516.iam.gserviceaccount.com"
+}
